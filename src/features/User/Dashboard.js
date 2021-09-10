@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { userSelector, fetchUserBytoken, clearState } from "./UserSlice";
 import Loader from "react-loader-spinner";
 import { useHistory } from "react-router-dom";
+import Layout from "../../components/Layout";
 
 export const Dashboard = () => {
   const history = useHistory();
@@ -22,41 +23,18 @@ export const Dashboard = () => {
     }
   }, [isError]);
 
-  const onLogOut = () => {
-    localStorage.removeItem("token");
-
-    history.push("/login");
-  };
-
   return (
-    <div className="">
+    <Layout className="">
       {isFetching ? (
         <Loader type="Puff" color="#00BFFF" height={100} width={100} />
       ) : (
         <div>
-          <header class="bg-white shadow">
-            <div class="max-w-3xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-              <h1 class="text-3xl font-bold text-gray-900">
-                Welcome {username}
-              </h1>
-            </div>
-          </header>
-          <main>
-            <div class="max-w-3xl mx-auto py-6 sm:px-6 lg:px-8">
-              <button
-                onClick={onLogOut}
-                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-              >
-                Log Out
-              </button>
-              <div class="px-4 py-6 sm:px-0">
-                <div class="border-4 border-dashed border-gray-200 rounded-lg h-96"></div>
-              </div>
-            </div>
-          </main>
+          <h1 className="text-3xl font-bold text-gray-900">
+            Welcome {username}
+          </h1>
         </div>
       )}
-    </div>
+    </Layout>
   );
 };
 

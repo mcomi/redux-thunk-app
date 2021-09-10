@@ -8,6 +8,8 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+    "@zach.codes/react-calendar": "^0.3.1",
+    "date-fns": "^2.23.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-hook-form": "^7.14.2",
@@ -18,7 +20,7 @@
     "react-scripts": "4.0.3"
   },
   "scripts": {
-    "start": "craco start",
+    "start": "TAILWIND_MODE=watch craco start",
     "build": "craco build",
     "test": "craco test",
     "eject": "react-scripts eject"
