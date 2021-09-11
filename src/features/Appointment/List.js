@@ -10,13 +10,9 @@ import {
 import toast from "react-hot-toast";
 import { useHistory } from "react-router-dom";
 import Layout from "../../components/Layout";
-import { Calendar } from "../../components/Calendar";
+import { MyCalendar } from "../../components/Calendar";
 
 const List = () => {
-  const [monthly, setMonthly] = useState(true);
-  const toggleCalendarView = () => {
-    setMonthly(!monthly);
-  };
   const dispatch = useDispatch();
   const history = useHistory();
   const { register, errors, handleSubmit } = useForm();
@@ -42,13 +38,7 @@ const List = () => {
     <Layout>
       {appoinments ? (
         <>
-          <button
-            onClick={toggleCalendarView}
-            classname="btn bg-indigo-500 hover:bg-indigo-600 text-white mb-5"
-          >
-            {monthly ? "View Week" : "View Month"}
-          </button>
-          <Calendar events={appoinments} monthly={monthly} />
+          <MyCalendar events={appoinments} />
         </>
       ) : (
         "No appoinments found"

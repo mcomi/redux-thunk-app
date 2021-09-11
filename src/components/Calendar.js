@@ -1,74 +1,55 @@
 import React, { useState } from "react";
-import { format, startOfMonth } from "date-fns";
+import { format, startOfMonth, parse, startOfWeek, getDay } from "date-fns";
+import enUS from "date-fns/locale/en-US";
 
-import {
-  MonthlyBody,
-  MonthlyDay,
-  MonthlyCalendar,
-  MonthlyNav,
-  DefaultMonthlyEventItem,
-  WeeklyCalendar,
-  WeeklyBody,
-  WeeklyContainer,
-  WeeklyDays,
-  DefaultWeeklyEventItem,
-} from "@zach.codes/react-calendar";
+import { Calendar, Views, dateFnsLocalizer } from "react-big-calendar";
 
-export const Calendar = ({ events, monthly }) => {
+const locales = {
+  "en-US": enUS,
+};
+
+const localizer = dateFnsLocalizer({
+  format,
+  parse,
+  startOfWeek,
+  getDay,
+  locales,
+});
+
+let allViews = Object.keys(Views).map((k) => Views[k]);
+
+const ColoredDateCellWrapper = ({ children }) =>
+  React.cloneElement(React.Children.only(children), {
+    style: {
+      backgroundColor: "lightblue",
+    },
+  });
+
+export const MyCalendar = ({ events, monthly }) => {
+  console.log(events);
   const formatedEvents = events.map((event) => {
     return {
       title: event.name,
-      date: new Date(event.startDate),
+      start: new Date(event.startDate),
+      end: new Date(event.endDate),
     };
   });
   let [currentMonth, setCurrentMonth] = useState(startOfMonth(new Date()));
 
   return (
-    <>
-      {monthly && (
-        <MonthlyCalendar
-          currentMonth={currentMonth}
-          onCurrentMonthChange={(date) => setCurrentMonth(date)}
-        >
-          <MonthlyNav />
-          <MonthlyBody events={formatedEvents}>
-            <MonthlyDay
-              renderDay={(data) =>
-                data.map((item, index) => (
-                  <DefaultMonthlyEventItem
-                    key={index}
-                    title={item.title}
-                    // Format the date here to be in the format you prefer
-                    date={format(item.date, "k:mm")}
-                  />
-                ))
-              }
-            />
-          </MonthlyBody>
-        </MonthlyCalendar>
-      )}
-
-      {!monthly && (
-        <WeeklyCalendar week={new Date()}>
-          <WeeklyContainer>
-            <WeeklyDays />
-            <WeeklyBody
-              events={formatedEvents}
-              renderItem={({ item, showingFullWeek }) => (
-                <DefaultWeeklyEventItem
-                  key={item.date.toISOString()}
-                  title={item.title}
-                  date={
-                    showingFullWeek
-                      ? format(item.date, "MMM do k:mm")
-                      : format(item.date, "k:mm")
-                  }
-                />
-              )}
-            />
-          </WeeklyContainer>
-        </WeeklyCalendar>
-      )}
-    </>
+    <Calendar
+      events={formatedEvents}
+      views={allViews}
+      step={60}
+      showMultiDayTimes
+      defaultDate={currentMonth}
+      components={{
+        timeSlotWrapper: ColoredDateCellWrapper,
+      }}
+      localizer={localizer}
+      startAccessor="start"
+      endAccessor="end"
+      style={{ height: 500 }}
+    />
   );
 };
